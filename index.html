@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI CHAT</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        /* Reset some default styles */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #1f1f1f; /* Dark background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            padding: 40px;
+            background-color: #2d2d2d; /* Darker container background */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            color: #eee; /* Text color */
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #ddd; /* Heading color */
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #ccc; /* Label color */
+        }
+
+        textarea {
+            resize: vertical;
+            padding: 10px;
+            border: 1px solid #555; /* Darker border color */
+            border-radius: 5px;
+            font-size: 16px;
+            line-height: 1.5;
+            min-height: 150px;
+            background-color: #333; /* Dark textarea background */
+            color: #eee; /* Text color */
+        }
+
+        button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .output {
+            margin-top: 40px;
+            background-color: #333; /* Dark output background */
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        .output h2 {
+            margin-bottom: 10px;
+            color: #ddd; /* Text color */
+        }
+
+        .output pre {
+            white-space: pre-wrap;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            color: #eee; /* Text color */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>AI CHAT</h1>
+        <form method="post" id="chat-form">
+            <label for="prompt">Enter your prompt:</label>
+            <textarea id="prompt" name="prompt" required></textarea>
+            <button type="submit">Generate</button>
+        </form>
+        <div class="output" id="output">
+            <h2>Result:</h2>
+            <pre id="result"></pre>
+        </div>
+    </div>
+<script type="importmap">
+        {
+            "imports": {
+                "@google/generative-ai": "https://esm.run/@google/generative-ai"
+            }
+        }
+    </script>
+
+    <script type="module">
+        import { GoogleGenerativeAI } from "@google/generative-ai";
+
+        // Replace with your own API key
+        const API_KEY = "AIzaSyAe60GJoeNDRCn4gsKM5kFZ6KYPSo1cB8I";
+
+        const genAI = new GoogleGenerativeAI(API_KEY);
+
+        async function run(event) {
+            event.preventDefault(); // Prevent form submission
+
+            const input = document.getElementById('prompt').value;
+            const model = genAI.getGenerativeModel({ model: "gemini-pro" });
+            const result = await model.generateContent(input);
+            const response = await result.response;
+            const text = await response.text();
+
+            document.getElementById('result').innerText = text;
+        }
+
+        document.getElementById('chat-form').addEventListener('submit', run);
+    </script>
+</body>
+
+</html>
